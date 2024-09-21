@@ -6,6 +6,6 @@
         <item name="expandedWidth">@dimen/expanded_width</item>
         <item name="expandedHeight">@dimen/expanded_height</item>
         <item name="expandedContainerBackground">@drawable/expended_container_background</item>
-        <item name="DTextSize">@dimen/D_text_size</item>
+        <item name="collapsedTextSize">@dimen/collapsed_text_size</item>
     </style>
 </resources>

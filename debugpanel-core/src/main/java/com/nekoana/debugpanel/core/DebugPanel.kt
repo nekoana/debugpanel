@@ -1,17 +1,21 @@
 package com.nekoana.debugpanel.core
 
+import android.animation.AnimatorSet
 import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Gravity.CENTER
+import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
@@ -106,7 +110,7 @@ class DebugPanel @JvmOverloads constructor(
 
         if (isExpanded) {
             setMeasuredDimension(
-                hoverBall.collapsedSize + containerPanel.expendedWidth + 20,
+                hoverBall.collapsedSize + containerPanel.expendedWidth,
                 containerPanel.expendedHeight
             )
         } else {
@@ -145,10 +149,29 @@ class DebugPanel @JvmOverloads constructor(
          */
         private val collapsedBackground: Drawable
 
+        private val textBounds = Rect()
+
+
+        private val inAnimatorSet =  AnimatorSet().apply {
+                playTogether(
+                    ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 1f, 0.8f),
+                    ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 1f, 0.8f),
+                )
+                duration = 200
+            }
+
+        private val outAnimatorSet =  AnimatorSet().apply {
+                playTogether(
+                    ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 0.8f, 1f),
+                    ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 0.8f, 1f),
+                )
+                duration = 200
+            }
+
         /**
          * 文字`D`画笔 在折叠状态下绘制
          */
-        private val DTextPaint = TextPaint().apply {
+        private val textPaint = TextPaint().apply {
             color = Color.BLACK
             isAntiAlias = true
             isFakeBoldText = true
@@ -168,7 +191,8 @@ class DebugPanel @JvmOverloads constructor(
             collapsedBackground = typeArray.getDrawable(R.styleable.DebugPanel_collapsedBackground)
                 ?: defaultCollapsedBackground
 
-            DTextPaint.textSize = typeArray.getDimension(R.styleable.DebugPanel_DTextSize, 0f)
+            textPaint.textSize =
+                typeArray.getDimension(R.styleable.DebugPanel_collapsedTextSize, 0f)
 
             typeArray.recycle()
 
@@ -181,6 +205,20 @@ class DebugPanel @JvmOverloads constructor(
             setMeasuredDimension(collapsedSize, collapsedSize)
         }
 
+        override fun onTouchEvent(event: MotionEvent?): Boolean {
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    outAnimatorSet.cancel()
+                    inAnimatorSet.start()
+                }
+                MotionEvent.ACTION_UP -> {
+                    inAnimatorSet.cancel()
+                    outAnimatorSet.start()
+                }
+            }
+            return super.onTouchEvent(event)
+        }
+
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
 
@@ -191,13 +229,12 @@ class DebugPanel @JvmOverloads constructor(
                 "X"
             }
 
-            val textWidth = DTextPaint.measureText(text)
-            val textHeight = DTextPaint.descent() - DTextPaint.ascent()
+            textPaint.getTextBounds(text, 0, text.length, textBounds)
 
-            val textX = (width - textWidth) / 2
-            val textY = (height - textHeight) / 2 - DTextPaint.ascent()
+            val x = width / 2 - textBounds.centerX()
+            val y = height / 2 - textBounds.centerY()
 
-            canvas.drawText(text, textX, textY, DTextPaint)
+            canvas.drawText(text, x.toFloat(), y.toFloat(), textPaint)
         }
     }
 
