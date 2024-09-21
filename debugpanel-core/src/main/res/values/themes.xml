@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DebugPanel" parent="Theme.AppCompat.DayNight">
+        <item name="collapsedSize">@dimen/collapsed_size</item>
+        <item name="collapsedBackground">@drawable/collapsed_background</item>
+        <item name="expandedWidth">@dimen/expanded_width</item>
+        <item name="expandedHeight">@dimen/expanded_height</item>
+        <item name="expandedContainerBackground">@drawable/expended_container_background</item>
+        <item name="DTextSize">@dimen/D_text_size</item>
+    </style>
+</resources>

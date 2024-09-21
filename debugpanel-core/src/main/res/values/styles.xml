@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DebugPanel">
+        <attr name="collapsedSize" format="dimension" />
+        <attr name="collapsedBackground" format="reference" />
+        <attr name="expandedWidth" format="dimension" />
+        <attr name="expandedHeight" format="dimension" />
+        <attr name="expandedContainerBackground" format="reference" />
+        <attr name="DTextSize" format="dimension" />
+    </declare-styleable>
+</resources>

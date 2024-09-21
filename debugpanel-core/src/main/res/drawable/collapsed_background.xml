@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#3C009688" />
+            <corners android:radius="@dimen/collapsed_radius" />
+        </shape>
+    </item>
+
+    <item>
+        <inset
+            android:insetLeft="10%"
+            android:insetTop="10%"
+            android:insetRight="10%"
+            android:insetBottom="10%">
+            <shape android:shape="oval">
+                <solid android:color="#78009688" />
+            </shape>
+        </inset>
+    </item>
+</layer-list>

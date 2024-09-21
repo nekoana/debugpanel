@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="collapsed_size">48dp</dimen>
+    <item name= "D_text_size" type="dimen">18sp</item>
+    <dimen name="expanded_width">320dp</dimen>
+    <dimen name="expanded_height">240dp</dimen>
+    <dimen name="collapsed_radius">12dp</dimen>
+</resources>
