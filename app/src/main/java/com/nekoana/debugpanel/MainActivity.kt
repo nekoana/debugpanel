@@ -1,9 +1,11 @@
 package com.nekoana.debugpanel
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.WindowManager
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.nekoana.debugpanel.core.DebugPanel
+import com.nekoana.debugpanel.DebugPanel
 import com.nekoana.debugpanel.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,9 +17,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val debugPane = DebugPanel(this)
+        val layoutParams = WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.TYPE_APPLICATION,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, android.graphics.PixelFormat.TRANSLUCENT).apply {
+            gravity = Gravity.START or Gravity.TOP
 
-        val layoutParams = WindowManager.LayoutParams(100,100,WindowManager.LayoutParams.TYPE_APPLICATION,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, android.graphics.PixelFormat.TRANSLUCENT).apply {
-            gravity = android.view.Gravity.BOTTOM or android.view.Gravity.START
+            y = 300
         }
 
         windowManager.addView(debugPane, layoutParams)

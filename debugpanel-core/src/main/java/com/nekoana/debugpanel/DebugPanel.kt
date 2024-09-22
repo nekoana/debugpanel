@@ -1,4 +1,4 @@
-package com.nekoana.debugpanel.core
+package com.nekoana.debugpanel
 
 import android.animation.AnimatorSet
 import android.animation.LayoutTransition
@@ -13,32 +13,36 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
-import android.view.Gravity.CENTER
-import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.customview.widget.ViewDragHelper
+import com.nekoana.debugpanel.core.R
+import kotlin.apply
 import kotlin.properties.Delegates
 
 class DebugPanel @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-) : LinearLayoutCompat(context, attrs, R.style.DebugPanel) {
+) : ViewGroup(context, attrs, R.style.DebugPanel) {
 
     private val containerPanel = ContainerPanel(context, attrs, defStyleAttr)
     private val hoverBall = HoverBall(context, attrs, defStyleAttr)
 
     init {
-        addView(hoverBall)
+        super.addView(hoverBall)
         //透明背景
         setBackgroundColor(Color.TRANSPARENT)
+        //不响应触摸事件
+        isClickable = false
+        //不响应焦点事件
+        isFocusable = false
+        //不响应触摸事件
+        isFocusableInTouchMode = false
+        //设置布局动画
         layoutTransition = LayoutTransition()
-        orientation = HORIZONTAL
     }
 
     /**
@@ -47,9 +51,9 @@ class DebugPanel @JvmOverloads constructor(
     private var isExpanded: Boolean by Delegates.observable(false) { _, oldValue, newValue ->
         if (oldValue != newValue) {
             if (newValue) {
-                addView(containerPanel)
+                super.addView(containerPanel)
             } else {
-                removeView(containerPanel)
+                super.removeView(containerPanel)
             }
 
             postInvalidate()
@@ -63,50 +67,15 @@ class DebugPanel @JvmOverloads constructor(
         }
     }
 
-    //todo 通过ViewDragHelper实现拖动功能
-    private val dragHelper = ViewDragHelper.create(this, object : ViewDragHelper.Callback() {
-        override fun tryCaptureView(
-            child: View,
-            pointerId: Int
-        ): Boolean {
-            //是否允许view的拖动功能，返回true是允许拖动，返回false是不允许拖动
-            return true
-        }
-
-        override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int {
-            //控制横向方向的拖动位移，如果不重写此方法默认是不允许横向运动的，按照下面重写方法后可以允许横向方向的拖动
-            return left
-        }
-
-        override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
-            //控制垂直方向的拖动位移，如果不重写此方法默认是不允许垂直运动的，重写方法后可以允许垂直方向的拖动
-            return top
-        }
-
-        override fun onViewPositionChanged(
-            changedView: View,
-            left: Int,
-            top: Int,
-            dx: Int,
-            dy: Int
-        ) {
-            super.onViewPositionChanged(changedView, left, top, dx, dy)
-        }
-
-        override fun onViewCaptured(capturedChild: View, activePointerId: Int) {
-            elevation += 20
-        }
-
-        override fun onViewDragStateChanged(state: Int) {
-            log("onViewDragStateChanged: $state")
-            if (state == ViewDragHelper.STATE_IDLE) {
-                elevation -= 20
-            }
-        }
-    })
+    override fun addView(view: View) {
+        containerPanel.addView(view)
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        hoverBall.measure(widthMeasureSpec, heightMeasureSpec)
+        containerPanel.measure(widthMeasureSpec, heightMeasureSpec)
 
         if (isExpanded) {
             setMeasuredDimension(
@@ -119,19 +88,28 @@ class DebugPanel @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        super.onLayout(changed, l, t, r, b)
-        log("onLayout: $changed, $l, $t, $r, $b")
-        //todo 保持 hoverBall 在原位置
+        val hoverBallWidth = hoverBall.measuredWidth
+        val hoverBallHeight = hoverBall.measuredHeight
+
+        val containerPanelWidth = containerPanel.measuredWidth
+        val containerPanelHeight = containerPanel.measuredHeight
+
+        if (isExpanded) {
+            hoverBall.layout(0, 0, hoverBallWidth, hoverBallHeight)
+            containerPanel.layout(
+                hoverBallWidth,
+                0,
+                hoverBallWidth + containerPanelWidth,
+                containerPanelHeight
+            )
+        } else {
+            hoverBall.layout(0, 0, hoverBallWidth, hoverBallHeight)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         //todo 绘制cutout
-    }
-
-
-    private fun log(message: String) {
-        Log.d(TAG, message)
     }
 
     private inner class HoverBall(
@@ -151,22 +129,21 @@ class DebugPanel @JvmOverloads constructor(
 
         private val textBounds = Rect()
 
+        private val inAnimatorSet = AnimatorSet().apply {
+            playTogether(
+                ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 1f, 0.8f),
+                ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 1f, 0.8f),
+            )
+            duration = 200
+        }
 
-        private val inAnimatorSet =  AnimatorSet().apply {
-                playTogether(
-                    ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 1f, 0.8f),
-                    ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 1f, 0.8f),
-                )
-                duration = 200
-            }
-
-        private val outAnimatorSet =  AnimatorSet().apply {
-                playTogether(
-                    ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 0.8f, 1f),
-                    ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 0.8f, 1f),
-                )
-                duration = 200
-            }
+        private val outAnimatorSet = AnimatorSet().apply {
+            playTogether(
+                ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 0.8f, 1f),
+                ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 0.8f, 1f),
+            )
+            duration = 200
+        }
 
         /**
          * 文字`D`画笔 在折叠状态下绘制
@@ -197,26 +174,11 @@ class DebugPanel @JvmOverloads constructor(
             typeArray.recycle()
 
             background = collapsedBackground
-            gravity = CENTER
         }
 
         override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             setMeasuredDimension(collapsedSize, collapsedSize)
-        }
-
-        override fun onTouchEvent(event: MotionEvent?): Boolean {
-            when (event?.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    outAnimatorSet.cancel()
-                    inAnimatorSet.start()
-                }
-                MotionEvent.ACTION_UP -> {
-                    inAnimatorSet.cancel()
-                    outAnimatorSet.start()
-                }
-            }
-            return super.onTouchEvent(event)
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -225,6 +187,8 @@ class DebugPanel @JvmOverloads constructor(
             //绘制“D”
             val text = if (!isExpanded) {
                 "D"
+            } else if(containerPanel.getChildCount() > 0){
+                "<"
             } else {
                 "X"
             }
@@ -289,7 +253,6 @@ class DebugPanel @JvmOverloads constructor(
             setMeasuredDimension(expendedWidth, expendedHeight)
         }
     }
-
 
     companion object {
         private const val TAG = "DebugPanel"

@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <com.nekoana.debugpanel.core.DebugPanel
+    <com.nekoana.debugpanel.DebugPanel
         android:id="@+id/debugPanel"
         android:layout_width="30dp"
         android:layout_height="30dp"
