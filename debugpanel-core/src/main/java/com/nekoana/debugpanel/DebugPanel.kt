@@ -13,6 +13,7 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -28,11 +29,11 @@ class DebugPanel @JvmOverloads constructor(
     @AttrRes defStyleAttr: Int = 0,
 ) : ViewGroup(context, attrs, R.style.DebugPanel) {
 
-    private val containerPanel = ContainerPanel(context, attrs, defStyleAttr)
-    private val hoverBall = HoverBall(context, attrs, defStyleAttr)
+    private val container = Container(context, attrs, defStyleAttr)
+    private val ball = Ball(context, attrs, defStyleAttr)
 
     init {
-        super.addView(hoverBall)
+        super.addView(ball)
         //透明背景
         setBackgroundColor(Color.TRANSPARENT)
         //不响应触摸事件
@@ -51,59 +52,65 @@ class DebugPanel @JvmOverloads constructor(
     private var isExpanded: Boolean by Delegates.observable(false) { _, oldValue, newValue ->
         if (oldValue != newValue) {
             if (newValue) {
-                super.addView(containerPanel)
+                super.addView(container)
             } else {
-                super.removeView(containerPanel)
+                super.removeView(container)
             }
 
             postInvalidate()
-            hoverBall.postInvalidate()
+            ball.postInvalidate()
         }
     }
 
     init {
-        hoverBall.setOnClickListener {
+        ball.setOnClickListener {
+            if (isExpanded) {
+                if (container.pop() && !container.isEmpty()) {
+                    return@setOnClickListener
+                }
+            }
+
             isExpanded = !isExpanded
         }
     }
 
     override fun addView(view: View) {
-        containerPanel.addView(view)
+        container.addView(view)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        hoverBall.measure(widthMeasureSpec, heightMeasureSpec)
-        containerPanel.measure(widthMeasureSpec, heightMeasureSpec)
+        ball.measure(widthMeasureSpec, heightMeasureSpec)
+        container.measure(widthMeasureSpec, heightMeasureSpec)
 
         if (isExpanded) {
             setMeasuredDimension(
-                hoverBall.collapsedSize + containerPanel.expendedWidth,
-                containerPanel.expendedHeight
+                ball.collapsedSize + container.expendedWidth,
+                container.expendedHeight
             )
         } else {
-            setMeasuredDimension(hoverBall.collapsedSize, hoverBall.collapsedSize)
+            setMeasuredDimension(ball.collapsedSize, ball.collapsedSize)
         }
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val hoverBallWidth = hoverBall.measuredWidth
-        val hoverBallHeight = hoverBall.measuredHeight
+        val hoverBallWidth = ball.measuredWidth
+        val hoverBallHeight = ball.measuredHeight
 
-        val containerPanelWidth = containerPanel.measuredWidth
-        val containerPanelHeight = containerPanel.measuredHeight
+        val containerPanelWidth = container.measuredWidth
+        val containerPanelHeight = container.measuredHeight
 
         if (isExpanded) {
-            hoverBall.layout(0, 0, hoverBallWidth, hoverBallHeight)
-            containerPanel.layout(
+            ball.layout(0, 0, hoverBallWidth, hoverBallHeight)
+            container.layout(
                 hoverBallWidth,
                 0,
                 hoverBallWidth + containerPanelWidth,
                 containerPanelHeight
             )
         } else {
-            hoverBall.layout(0, 0, hoverBallWidth, hoverBallHeight)
+            ball.layout(0, 0, hoverBallWidth, hoverBallHeight)
         }
     }
 
@@ -112,7 +119,8 @@ class DebugPanel @JvmOverloads constructor(
         //todo 绘制cutout
     }
 
-    private inner class HoverBall(
+
+    private inner class Ball(
         context: Context,
         attrs: AttributeSet? = null,
         @AttrRes defStyleAttr: Int = 0,
@@ -131,16 +139,16 @@ class DebugPanel @JvmOverloads constructor(
 
         private val inAnimatorSet = AnimatorSet().apply {
             playTogether(
-                ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 1f, 0.8f),
-                ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 1f, 0.8f),
+                ObjectAnimator.ofFloat(this@Ball, "scaleX", 1f, 0.8f),
+                ObjectAnimator.ofFloat(this@Ball, "scaleY", 1f, 0.8f),
             )
             duration = 200
         }
 
         private val outAnimatorSet = AnimatorSet().apply {
             playTogether(
-                ObjectAnimator.ofFloat(this@HoverBall, "scaleX", 0.8f, 1f),
-                ObjectAnimator.ofFloat(this@HoverBall, "scaleY", 0.8f, 1f),
+                ObjectAnimator.ofFloat(this@Ball, "scaleX", 0.8f, 1f),
+                ObjectAnimator.ofFloat(this@Ball, "scaleY", 0.8f, 1f),
             )
             duration = 200
         }
@@ -187,7 +195,7 @@ class DebugPanel @JvmOverloads constructor(
             //绘制“D”
             val text = if (!isExpanded) {
                 "D"
-            } else if(containerPanel.getChildCount() > 0){
+            } else if (container.getChildCount() > 0) {
                 "<"
             } else {
                 "X"
@@ -200,9 +208,24 @@ class DebugPanel @JvmOverloads constructor(
 
             canvas.drawText(text, x.toFloat(), y.toFloat(), textPaint)
         }
+
+        override fun onTouchEvent(event: MotionEvent?): Boolean {
+            when(event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    inAnimatorSet.start()
+                    outAnimatorSet.cancel()
+                }
+                MotionEvent.ACTION_UP -> {
+                    outAnimatorSet.start()
+                    inAnimatorSet.cancel()
+                }
+            }
+
+            return super.onTouchEvent(event)
+        }
     }
 
-    private inner class ContainerPanel(
+    private inner class Container(
         context: Context,
         attrs: AttributeSet? = null,
         @AttrRes defStyleAttr: Int = 0,
@@ -224,6 +247,8 @@ class DebugPanel @JvmOverloads constructor(
         }
 
         private val expendedContainerBackground: Drawable
+
+        private val containerStack = mutableListOf<View>()
 
         init {
             val typeArray = context.obtainStyledAttributes(
@@ -252,6 +277,24 @@ class DebugPanel @JvmOverloads constructor(
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             setMeasuredDimension(expendedWidth, expendedHeight)
         }
+
+        override fun onViewAdded(child: View?) {
+            super.onViewAdded(child)
+            child?.let { containerStack.add(it) }
+        }
+
+        override fun onViewRemoved(child: View?) {
+            super.onViewRemoved(child)
+            child?.let { containerStack.remove(it) }
+        }
+
+        fun pop(): Boolean {
+            val last = containerStack.lastOrNull() ?: return false
+            removeView(last)
+            return true
+        }
+
+        fun isEmpty() = containerStack.isEmpty()
     }
 
     companion object {
