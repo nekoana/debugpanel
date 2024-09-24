@@ -5,10 +5,4 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
-
-    <com.nekoana.debugpanel.DebugPanel
-        android:id="@+id/debugPanel"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:clickable="true" />
 </FrameLayout>
