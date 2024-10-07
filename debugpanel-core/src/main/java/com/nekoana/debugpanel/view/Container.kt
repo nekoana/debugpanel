@@ -70,8 +70,10 @@ class Container(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension(expendedWidth, expendedHeight)
+        val widthSpec = MeasureSpec.makeMeasureSpec(expendedWidth, MeasureSpec.EXACTLY)
+        val heightSpec = MeasureSpec.makeMeasureSpec(expendedHeight, MeasureSpec.EXACTLY)
+
+        super.onMeasure(widthSpec, heightSpec)
     }
 
     override fun onDraw(canvas: Canvas) {

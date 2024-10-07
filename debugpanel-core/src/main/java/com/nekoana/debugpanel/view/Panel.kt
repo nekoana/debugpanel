@@ -4,9 +4,11 @@ import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.appcompat.view.ContextThemeWrapper
 import com.nekoana.debugpanel.DebugPanelScope
@@ -86,7 +88,7 @@ class Panel @JvmOverloads constructor(
     private var isExpanded: Boolean by Delegates.observable(false) { _, oldValue, newValue ->
         if (oldValue != newValue) {
             if (newValue) {
-                super.addView(container)
+                addView(container)
                 panelScope?.invoke(this)
             } else {
                 super.removeView(container)
@@ -151,7 +153,7 @@ class Panel @JvmOverloads constructor(
     override fun button(text: String, onClick: () -> Unit) {
         container.addView(button(context, text) { v ->
             onClick()
-        })
+        }, FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT))
     }
 
     override fun list(scope: DebugPanelScope.() -> Unit) {

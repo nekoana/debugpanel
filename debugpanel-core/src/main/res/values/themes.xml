@@ -2,7 +2,7 @@
 <resources>
 
     <style name="DebugPanel" parent="Theme.AppCompat.DayNight">
-        <item name="android:buttonStyle">@style/DebugButton</item>
+
     </style>
 
     <style name="DebugPanel.Ball" parent="DebugPanel">
@@ -18,9 +18,18 @@
         <item name="android:padding">@dimen/container_padding</item>
     </style>
 
+    <style name="DebugPanel.Button" parent="DebugPanel">
+        <item name="android:buttonStyle">@style/DebugButton</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <style name="DebugButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:elevation">2dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>

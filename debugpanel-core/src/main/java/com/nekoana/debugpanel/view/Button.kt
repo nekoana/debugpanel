@@ -10,7 +10,7 @@ fun button(
     context: Context,
     text: String,
     onClick: View.OnClickListener
-) = AppCompatButton(ContextThemeWrapper(context, R.style.DebugPanel)).apply {
+) = AppCompatButton(ContextThemeWrapper(context, R.style.DebugPanel_Button)).apply {
     setOnClickListener(onClick)
     setText(text)
 }
