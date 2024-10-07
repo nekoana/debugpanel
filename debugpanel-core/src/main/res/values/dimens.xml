@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="collapsed_size">48dp</dimen>
-    <item name= "collapsed_text_size" type="dimen">18sp</item>
+    <item name="collapsed_text_size" type="dimen">18sp</item>
     <dimen name="expanded_width">180dp</dimen>
     <dimen name="expanded_height">240dp</dimen>
     <dimen name="collapsed_radius">12dp</dimen>
+    <dimen name="container_padding">4dp</dimen>
 </resources>

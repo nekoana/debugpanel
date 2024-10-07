@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="DebugPanel" parent="Theme.AppCompat.DayNight">
+        <item name="android:buttonStyle">@style/DebugButton</item>
+    </style>
+
+    <style name="DebugPanel.Ball" parent="DebugPanel">
         <item name="collapsedSize">@dimen/collapsed_size</item>
         <item name="collapsedBackground">@drawable/collapsed_background</item>
+        <item name="collapsedTextSize">@dimen/collapsed_text_size</item>
+    </style>
+
+    <style name="DebugPanel.Container" parent="DebugPanel">
         <item name="expandedWidth">@dimen/expanded_width</item>
         <item name="expandedHeight">@dimen/expanded_height</item>
         <item name="expandedContainerBackground">@drawable/expended_container_background</item>
-        <item name="collapsedTextSize">@dimen/collapsed_text_size</item>
+        <item name="android:padding">@dimen/container_padding</item>
+    </style>
+
+    <style name="DebugButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 </resources>
