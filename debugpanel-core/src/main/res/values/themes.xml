@@ -26,6 +26,12 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="DebugPanel.List" parent="DebugPanel"></style>
+
+    <style name="DebugPanel.Switch" parent="DebugPanel">
+        <item name="switchStyle">@style/DebugSwitch</item>
+    </style>
+
     <style name="DebugButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
         <item name="android:layout_width">match_parent</item>
@@ -33,5 +39,11 @@
         <item name="android:elevation">2dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="DebugSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:track">@drawable/selector_track</item>
+        <item name="android:thumb">@drawable/selector_thumb</item>
+        <item name="android:layout_height">84dp</item>
     </style>
 </resources>

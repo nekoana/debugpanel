@@ -9,8 +9,12 @@ import com.nekoana.debugpanel.core.R
 fun button(
     context: Context,
     text: String,
-    onClick: View.OnClickListener
+    onClick: () -> Unit,
 ) = AppCompatButton(ContextThemeWrapper(context, R.style.DebugPanel_Button)).apply {
-    setOnClickListener(onClick)
     setText(text)
+    setOnClickListener(object : View.OnClickListener {
+        override fun onClick(v: View?) {
+            onClick()
+        }
+    })
 }

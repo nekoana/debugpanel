@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.ContextThemeWrapper
+import com.nekoana.debugpanel.DebugPanelScope
 import com.nekoana.debugpanel.core.R
 import kotlin.apply
 
@@ -21,7 +22,7 @@ class Container(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-) : FrameLayout(ContextThemeWrapper(context, R.style.DebugPanel_Container), attrs, defStyleAttr) {
+) : FrameLayout(ContextThemeWrapper(context, R.style.DebugPanel_Container), attrs, defStyleAttr),DebugPanelScope {
     /**
      * 展开时的宽度
      */
@@ -98,4 +99,8 @@ class Container(
     }
 
     fun isEmpty() = containerStack.isEmpty()
+
+    override fun view(view: () -> View) {
+        TODO("Not yet implemented")
+    }
 }

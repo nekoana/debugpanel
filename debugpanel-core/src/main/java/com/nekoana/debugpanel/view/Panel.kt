@@ -4,11 +4,9 @@ import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.appcompat.view.ContextThemeWrapper
 import com.nekoana.debugpanel.DebugPanelScope
@@ -19,7 +17,7 @@ fun interface OnDragCallback {
     fun onDrag(offsetX: Int, offsetY: Int)
 }
 
-object DragHelper {
+private object DragHelper {
     fun attach(view: View, callback: OnDragCallback) {
         view.setOnTouchListener(DragHelperTouchListener(callback))
     }
@@ -54,14 +52,13 @@ class Panel @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-) : ViewGroup(ContextThemeWrapper(context, R.style.DebugPanel), attrs, defStyleAttr),
-    DebugPanelScope {
+) : ViewGroup(ContextThemeWrapper(context, R.style.DebugPanel), attrs, defStyleAttr){
     private var onDragCallback: OnDragCallback? = null
 
     private val container = Container(context, attrs, defStyleAttr)
     private val ball = Ball(context, attrs, defStyleAttr)
 
-    private var panelScope: (DebugPanelScope.() -> Unit)? = null
+    private var scope: (DebugPanelScope.() -> Unit)? = null
 
     init {
         addView(ball)
@@ -89,7 +86,7 @@ class Panel @JvmOverloads constructor(
         if (oldValue != newValue) {
             if (newValue) {
                 addView(container)
-                panelScope?.invoke(this)
+                scope?.invoke(container)
             } else {
                 super.removeView(container)
             }
@@ -107,7 +104,7 @@ class Panel @JvmOverloads constructor(
     }
 
     fun setPanelScope(scope: DebugPanelScope.() -> Unit) {
-        panelScope = scope
+        this@Panel.scope = scope
     }
 
     fun setOnDragCallback(callback: OnDragCallback) {
@@ -149,26 +146,9 @@ class Panel @JvmOverloads constructor(
             ball.layout(0, 0, hoverBallWidth, hoverBallHeight)
         }
     }
+}
 
-    override fun button(text: String, onClick: () -> Unit) {
-        container.addView(button(context, text) { v ->
-            onClick()
-        }, FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT))
-    }
-
-    override fun list(scope: DebugPanelScope.() -> Unit) {
-        TODO("Not yet implemented")
-    }
-
-    override fun switch(
-        text: String,
-        checked: Boolean,
-        onClick: (Boolean) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    override fun view(view: () -> View) {
-        TODO("Not yet implemented")
-    }
+fun panel(context: Context,scope: DebugPanelScope.() -> Unit, onDragCallback: OnDragCallback) = Panel(context).apply {
+    setOnDragCallback(onDragCallback)
+    setPanelScope(scope)
 }

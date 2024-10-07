@@ -4,24 +4,56 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.nekoana.debugpanel.view.Panel
+import com.nekoana.debugpanel.view.panel
 import kotlin.apply
 
-
 interface DebugPanelScope {
-    fun button(text: String, onClick: () -> Unit)
-    fun switch(text: String, checked: Boolean, onClick: (Boolean) -> Unit)
-    fun list(scope: DebugPanelScope.() -> Unit)
+    fun button(text: String, onClick: () -> Unit) {
+        if (this is ViewGroup) {
+            addView(
+                com.nekoana.debugpanel.view.button(context, text, onClick),
+                LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            )
+        }
+    }
+
+    fun switch(
+        checked: Boolean,
+        textOn: String,
+        textOff: String,
+        onCheckedChange: (Boolean) -> Unit
+    ) {
+        if (this is ViewGroup) {
+            addView(
+                com.nekoana.debugpanel.view.switch(
+                    context,
+                    checked,
+                    textOn,
+                    textOff,
+                    onCheckedChange
+                ), LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            )
+        }
+    }
+
+    fun list(scope: DebugPanelScope.() -> Unit) {
+        if (this is ViewGroup) {
+            addView(com.nekoana.debugpanel.view.list(context, scope))
+        }
+    }
+
     fun view(view: () -> View)
 }
 
 class DebugPanel(
     context: Context,
     lifecycleOwner: LifecycleOwner,
-    panelScope: DebugPanelScope.() -> Unit
+    scope: DebugPanelScope.() -> Unit
 ) : DefaultLifecycleObserver {
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
@@ -34,14 +66,11 @@ class DebugPanel(
         gravity = Gravity.START or Gravity.TOP
     }
 
-    private val panel = Panel(context).apply {
-        setOnDragCallback { offsetX, offsetY ->
-            panelLayoutParams.x += offsetX
-            panelLayoutParams.y += offsetY
+    private val panel = panel(context, scope) { offsetX, offsetY ->
+        panelLayoutParams.x += offsetX
+        panelLayoutParams.y += offsetY
 
-            windowManager.updateViewLayout(this, panelLayoutParams)
-        }
-        setPanelScope(panelScope)
+        updatePanelLayout()
     }
 
     init {
@@ -59,8 +88,8 @@ class DebugPanel(
         windowManager.removeView(panel)
     }
 
-    companion object {
-        private const val TAG = "DebugPanel"
+    private fun updatePanelLayout() {
+        windowManager.updateViewLayout(panel, panelLayoutParams)
     }
 
 }

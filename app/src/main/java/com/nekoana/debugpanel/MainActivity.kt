@@ -14,6 +14,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         DebugPanel(this, this){
+            list {
+                button("Hello"){
+                    Toast.makeText(this@MainActivity, "Hi", Toast.LENGTH_SHORT).show()
+                }
+                button("World!") {
+                    Toast.makeText(this@MainActivity, "World", Toast.LENGTH_SHORT).show()
+                }
+
+                switch(true,"On","Off") {
+                    Toast.makeText(this@MainActivity, "isChecked $it", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             button("Hello"){
                 Toast.makeText(this@MainActivity, "Hi", Toast.LENGTH_SHORT).show()
             }
