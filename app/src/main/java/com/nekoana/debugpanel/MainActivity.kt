@@ -1,8 +1,10 @@
 package com.nekoana.debugpanel
 
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 import com.nekoana.debugpanel.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,18 @@ class MainActivity : AppCompatActivity() {
 
                 checkbox(true,"World!") {
                     Toast.makeText(this@MainActivity, "isChecked $it", Toast.LENGTH_SHORT).show()
+                }
+
+                view {
+                    TextView(this@MainActivity).apply {
+                        text = "Hello World"
+                    }
+                }
+
+                view {
+                    MaterialButton(this@MainActivity).apply {
+                        text = "Material Button"
+                    }
                 }
             }
 

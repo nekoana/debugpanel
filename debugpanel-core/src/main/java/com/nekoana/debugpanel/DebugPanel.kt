@@ -45,7 +45,11 @@ interface DebugPanelScope {
         }
     }
 
-    fun view(view: () -> View)
+    fun view(view: () -> View) {
+        if (this is ViewGroup) {
+            addView(view(),LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
+        }
+    }
 }
 
 class DebugPanel(

@@ -28,10 +28,6 @@ class List @JvmOverloads constructor(
         this.scope = scope
         scope.invoke(this)
     }
-
-    override fun view(view: () -> View) {
-        TODO("Not yet implemented")
-    }
 }
 
 fun list(context: Context, scope: DebugPanelScope.() -> Unit): ViewGroup = List(context).apply {

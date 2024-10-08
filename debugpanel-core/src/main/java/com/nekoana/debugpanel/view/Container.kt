@@ -99,8 +99,4 @@ class Container(
     }
 
     fun isEmpty() = containerStack.isEmpty()
-
-    override fun view(view: () -> View) {
-        TODO("Not yet implemented")
-    }
 }
