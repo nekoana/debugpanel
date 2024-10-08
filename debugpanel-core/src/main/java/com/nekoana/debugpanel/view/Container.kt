@@ -18,7 +18,7 @@ import com.nekoana.debugpanel.core.R
 import kotlin.apply
 
 
-class Container(
+internal class Container(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,

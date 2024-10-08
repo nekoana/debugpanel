@@ -13,7 +13,7 @@ import com.nekoana.debugpanel.DebugPanelScope
 import com.nekoana.debugpanel.core.R
 import kotlin.properties.Delegates
 
-fun interface OnDragCallback {
+internal fun interface OnDragCallback {
     fun onDrag(offsetX: Int, offsetY: Int)
 }
 
@@ -48,7 +48,7 @@ private object DragHelper {
     }
 }
 
-class Panel @JvmOverloads constructor(
+internal class Panel @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
@@ -148,7 +148,7 @@ class Panel @JvmOverloads constructor(
     }
 }
 
-fun panel(context: Context,scope: DebugPanelScope.() -> Unit, onDragCallback: OnDragCallback) = Panel(context).apply {
+internal fun panel(context: Context,scope: DebugPanelScope.() -> Unit, onDragCallback: OnDragCallback) = Panel(context).apply {
     setOnDragCallback(onDragCallback)
     setPanelScope(scope)
 }

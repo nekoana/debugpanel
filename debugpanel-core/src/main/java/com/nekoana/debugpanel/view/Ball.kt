@@ -17,7 +17,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import com.nekoana.debugpanel.core.R
 import kotlin.apply
 
-class Ball(
+internal class Ball(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,

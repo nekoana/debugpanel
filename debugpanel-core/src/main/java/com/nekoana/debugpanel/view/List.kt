@@ -11,7 +11,7 @@ import com.nekoana.debugpanel.DebugPanelScope
 import com.nekoana.debugpanel.core.R
 
 
-class List @JvmOverloads constructor(
+internal class List @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0
