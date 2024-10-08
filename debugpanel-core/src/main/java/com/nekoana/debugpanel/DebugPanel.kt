@@ -22,19 +22,17 @@ interface DebugPanelScope {
         }
     }
 
-    fun switch(
+    fun checkbox(
         checked: Boolean,
-        textOn: String,
-        textOff: String,
+        text: String,
         onCheckedChange: (Boolean) -> Unit
     ) {
         if (this is ViewGroup) {
             addView(
-                com.nekoana.debugpanel.view.switch(
+                com.nekoana.debugpanel.view.checkbox(
                     context,
                     checked,
-                    textOn,
-                    textOff,
+                    text,
                     onCheckedChange
                 ), LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             )

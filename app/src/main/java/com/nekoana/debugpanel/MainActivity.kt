@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "World", Toast.LENGTH_SHORT).show()
                 }
 
-                switch(true,"On","Off") {
+                checkbox(true,"World!") {
                     Toast.makeText(this@MainActivity, "isChecked $it", Toast.LENGTH_SHORT).show()
                 }
             }
