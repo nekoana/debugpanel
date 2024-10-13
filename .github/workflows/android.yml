@@ -24,23 +24,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew :debugpanel-core:assembleRelease
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload AAR artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
-          draft: false
-          prerelease: false
-
-      - name: Upload AAR artifact to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: debugpanel-core/build/outputs/aar/debugpanel-core-release.aar
-          asset_name: debugpanel-core-release.aar
-          asset_content_type: application/zip
+          name: debugpanel-core-aar
+          path: debugpanel-core/build/outputs/aar/debugpanel-core-release.aar
