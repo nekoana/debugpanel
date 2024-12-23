@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DebugPanel_Container">
-        <attr name="expandedWidth" format="dimension" />
-        <attr name="expandedHeight" format="dimension" />
-        <attr name="expandedContainerBackground" format="reference" />
+        <attr name="debugpanel_expandedWidth" format="dimension" />
+        <attr name="debugpanel_expandedHeight" format="dimension" />
+        <attr name="debugpanel_expandedContainerBackground" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="DebugPanel_Ball">
-        <attr name="collapsedSize" format="dimension" />
-        <attr name="collapsedBackground" format="reference" />
-        <attr name="collapsedTextSize" format="dimension" />
+        <attr name="debugpanel_collapsedSize" format="dimension" />
+        <attr name="debugpanel_collapsedBackground" format="reference" />
+        <attr name="debugpanel_collapsedTextSize" format="dimension" />
     </declare-styleable>
 </resources>

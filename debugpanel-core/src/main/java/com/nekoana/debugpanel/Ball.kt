@@ -1,4 +1,4 @@
-package com.nekoana.debugpanel.view
+package com.nekoana.debugpanel
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -69,16 +69,16 @@ internal class Ball(
             R.style.DebugPanel_Ball
         )
         collapsedSize =
-            typeArray.getDimensionPixelSize(R.styleable.DebugPanel_Ball_collapsedSize, 0)
+            typeArray.getDimensionPixelSize(R.styleable.DebugPanel_Ball_debugpanel_collapsedSize, 0)
 
         val defaultCollapsedBackground =
-            AppCompatResources.getDrawable(context, R.drawable.collapsed_background)!!
+            AppCompatResources.getDrawable(context, R.drawable.debugpanel_collapsed_background)!!
         collapsedBackground =
-            typeArray.getDrawable(R.styleable.DebugPanel_Ball_collapsedBackground)
+            typeArray.getDrawable(R.styleable.DebugPanel_Ball_debugpanel_collapsedBackground)
                 ?: defaultCollapsedBackground
 
         textPaint.textSize =
-            typeArray.getDimension(R.styleable.DebugPanel_Ball_collapsedTextSize, 0f)
+            typeArray.getDimension(R.styleable.DebugPanel_Ball_debugpanel_collapsedTextSize, 0f)
 
         typeArray.recycle()
 

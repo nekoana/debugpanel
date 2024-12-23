@@ -1,4 +1,4 @@
-package com.nekoana.debugpanel.view
+package com.nekoana.debugpanel
 
 import android.content.Context
 import android.graphics.Canvas
@@ -13,7 +13,6 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.ContextThemeWrapper
-import com.nekoana.debugpanel.DebugPanelScope
 import com.nekoana.debugpanel.core.R
 import kotlin.apply
 
@@ -22,7 +21,7 @@ internal class Container(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-) : FrameLayout(ContextThemeWrapper(context, R.style.DebugPanel_Container), attrs, defStyleAttr),DebugPanelScope {
+) : FrameLayout(ContextThemeWrapper(context, R.style.DebugPanel_Container), attrs, defStyleAttr) {
     /**
      * 展开时的宽度
      */
@@ -51,9 +50,15 @@ internal class Container(
             R.style.DebugPanel_Container
         )
         expendedWidth =
-            typeArray.getDimensionPixelSize(R.styleable.DebugPanel_Container_expandedWidth, 0)
+            typeArray.getDimensionPixelSize(
+                R.styleable.DebugPanel_Container_debugpanel_expandedWidth,
+                0
+            )
         expendedHeight =
-            typeArray.getDimensionPixelSize(R.styleable.DebugPanel_Container_expandedHeight, 0)
+            typeArray.getDimensionPixelSize(
+                R.styleable.DebugPanel_Container_debugpanel_expandedHeight,
+                0
+            )
 
         val defaultExpendedContainerBackground =
             AppCompatResources.getDrawable(
@@ -62,7 +67,7 @@ internal class Container(
             )!!
 
         expendedContainerBackground =
-            typeArray.getDrawable(R.styleable.DebugPanel_Container_expandedContainerBackground)
+            typeArray.getDrawable(R.styleable.DebugPanel_Container_debugpanel_expandedContainerBackground)
                 ?: defaultExpendedContainerBackground
 
         typeArray.recycle()

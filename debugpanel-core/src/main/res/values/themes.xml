@@ -6,34 +6,36 @@
     </style>
 
     <style name="DebugPanel.Ball" parent="DebugPanel">
-        <item name="collapsedSize">@dimen/collapsed_size</item>
-        <item name="collapsedBackground">@drawable/collapsed_background</item>
-        <item name="collapsedTextSize">@dimen/collapsed_text_size</item>
+        <item name="debugpanel_collapsedSize">@dimen/debugpanel_collapsed_size</item>
+        <item name="debugpanel_collapsedBackground">@drawable/debugpanel_collapsed_background</item>
+        <item name="debugpanel_collapsedTextSize">@dimen/debugpanel_collapsed_text_size</item>
     </style>
 
     <style name="DebugPanel.Container" parent="DebugPanel">
-        <item name="expandedWidth">@dimen/expanded_width</item>
-        <item name="expandedHeight">@dimen/expanded_height</item>
-        <item name="expandedContainerBackground">@drawable/expended_container_background</item>
-        <item name="android:padding">@dimen/container_padding</item>
+        <item name="debugpanel_expandedWidth">@dimen/debugpanel_expanded_width</item>
+        <item name="debugpanel_expandedHeight">@dimen/debugpanel_expanded_height</item>
+        <item name="debugpanel_expandedContainerBackground">
+            @drawable/expended_container_background
+        </item>
+        <item name="android:padding">@dimen/debugpanel_container_padding</item>
     </style>
 
     <style name="DebugPanel.Button" parent="DebugPanel">
-        <item name="android:buttonStyle">@style/DebugButton</item>
+        <item name="android:buttonStyle">@style/DebugPanel.Style.Button</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:elevation">2dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="DebugPanel.List" parent="DebugPanel"></style>
+    <style name="DebugPanel.List" parent="DebugPanel" />
 
     <style name="DebugPanel.Checkbox" parent="DebugPanel">
-        <item name="checkboxStyle">@style/DebugCheckBox</item>
+        <item name="checkboxStyle">@style/DebugPanel.CheckBox</item>
     </style>
 
-    <style name="DebugButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_background</item>
+    <style name="DebugPanel.Style.Button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/debugpanel_button_background</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:elevation">2dp</item>
@@ -41,8 +43,8 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="DebugCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:background">@drawable/button_background</item>
+    <style name="DebugPanel.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:background">@drawable/debugpanel_button_background</item>
         <item name="android:elevation">2dp</item>
         <item name="android:buttonTint">#03EBD5</item>
     </style>
