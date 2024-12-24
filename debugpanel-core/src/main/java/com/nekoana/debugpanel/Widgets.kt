@@ -70,6 +70,7 @@ class Checkbox() : Debug() {
                 AppCompatCheckBox(ContextThemeWrapper(parent.context, R.style.DebugPanel_Checkbox))
 
             checkbox.text = text
+            checkbox.isChecked = isChecked
             checkbox.setOnClickListener {
                 onCheckedChange?.invoke(!isChecked)
             }
