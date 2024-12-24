@@ -71,8 +71,9 @@ class Checkbox() : Debug() {
 
             checkbox.text = text
             checkbox.isChecked = isChecked
-            checkbox.setOnClickListener {
-                onCheckedChange?.invoke(!isChecked)
+            checkbox.setOnCheckedChangeListener { _, isChecked ->
+                this@Checkbox.isChecked = isChecked
+                onCheckedChange?.invoke(isChecked)
             }
             parent.addView(
                 checkbox,

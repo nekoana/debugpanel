@@ -1,6 +1,5 @@
 package com.nekoana.debugpanel
 
-import android.R.attr.button
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,56 +12,67 @@ class MainActivity : AppCompatActivity() {
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         DebugPanel(this, this) {
             scroller {
                 list {
-                   button{
-                       text = "A"
-                       onClick = {
-                           Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
-                       }
-
-                   }
-                    button{
+                    checkbox {
+                        isChecked = false
                         text = "A"
-                        onClick = {
-                            Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
+                        onCheckedChange = { c ->
+                            Toast.makeText(
+                                this@MainActivity,
+                                isChecked.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-
                     }
-                    button{
+
+                    button {
                         text = "A"
                         onClick = {
                             Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
                         }
 
                     }
-                    button{
+                    button {
+                        text = "A"
+                        onClick = {
+                            Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+                    button {
+                        text = "A"
+                        onClick = {
+                            Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+                    button {
                         text = "A"
                         onClick = {
                             Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    button{
+                    button {
                         text = "A"
                         onClick = {
                             Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    button{
+                    button {
                         text = "A"
                         onClick = {
                             Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    button{
+                    button {
                         text = "A"
                         onClick = {
                             Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    button{
+                    button {
                         text = "A"
                         onClick = {
                             Toast.makeText(this@MainActivity, "A", Toast.LENGTH_SHORT).show()
@@ -73,7 +83,11 @@ class MainActivity : AppCompatActivity() {
                         text = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
                         isChecked = true
                         onCheckedChange = { isChecked ->
-                            Toast.makeText(this@MainActivity, isChecked.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@MainActivity,
+                                isChecked.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
